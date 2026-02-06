@@ -69,16 +69,18 @@ describe('InternalUsdt0ProtocolTon', () => {
     jest.clearAllMocks()
 
     account = new WalletAccountTon(SEED, "44'/607'/0'")
-
+    const MOCK_TRANSFER = {
+      hash: () => Buffer.from('a'.repeat(64), 'hex')
+    }
     account.getAddress = jest.fn().mockResolvedValue(USER_ADDRESS)
     account._getJettonWalletAddress = jest.fn().mockResolvedValue(JETTON_WALLET_ADDRESS)
-    account._getTransfer = jest.fn().mockResolvedValue('dummy-transfer-object')
+    account._getTransfer = jest.fn().mockResolvedValue(MOCK_TRANSFER)
     account._getTransferFee = jest.fn().mockResolvedValue(50000n)
-    account._getMessageHash = jest.fn().mockReturnValue('dummy-message-hash')
     account._contract = { send: jest.fn() }
     account._tonClient = 'dummy-ton-client'
 
     protocol = new InternalUsdt0ProtocolTon(account)
+    account._mockTransfer = MOCK_TRANSFER
   })
 
   describe('bridge', () => {
@@ -102,13 +104,12 @@ describe('InternalUsdt0ProtocolTon', () => {
       expect(internalMock).toHaveBeenCalledWith(DUMMY_BRIDGE_MESSAGE)
 
       expect(account._getTransfer).toHaveBeenCalledWith(DUMMY_BRIDGE_MESSAGE)
-      expect(account._getTransferFee).toHaveBeenCalledWith('dummy-transfer-object')
-      expect(account._contract.send).toHaveBeenCalledWith('dummy-transfer-object')
-      expect(account._getMessageHash).toHaveBeenCalledWith(DUMMY_BRIDGE_MESSAGE)
+      expect(account._getTransferFee).toHaveBeenCalledWith(account._mockTransfer)
+      expect(account._contract.send).toHaveBeenCalledWith(account._mockTransfer)
 
       
       expect(result).toEqual({
-        hash: 'dummy-message-hash',
+        hash: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
         fee: 50000n,
         bridgeFee: 100n,
       })
@@ -165,7 +166,7 @@ describe('InternalUsdt0ProtocolTon', () => {
       expect(internalMock).toHaveBeenCalledWith(DUMMY_BRIDGE_MESSAGE)
 
       expect(account._getTransfer).toHaveBeenCalledWith(DUMMY_BRIDGE_MESSAGE)
-      expect(account._getTransferFee).toHaveBeenCalledWith('dummy-transfer-object')
+      expect(account._getTransferFee).toHaveBeenCalledWith(account._mockTransfer)
       
       expect(account._contract.send).not.toHaveBeenCalled()
 

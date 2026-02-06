@@ -27,13 +27,13 @@
   },
   "dependencies": {
     "@tetherto/wdk-wallet": "^1.0.0-beta.1",
-    "@tetherto/wdk-wallet-ton": "^1.0.0-beta.2",
-    "@tetherto/wdk-wallet-ton-gasless": "^1.0.0-beta.1",
+    "@tetherto/wdk-wallet-ton": "^1.0.0-beta.5",
+    "@tetherto/wdk-wallet-ton-gasless": "^1.0.0-beta.3",
     "@ton/core": "0.59.1",
-    "@ton/ton": "15.2.1",
-    "@wdk-ton-packages/ui-bridge-oft": "1.0.0-canary.6",
+    "@ton/ton": "15.1.0",
+    "@wdk-ton-packages/ui-bridge-oft": "1.0.0-canary.7",
     "@wdk-ton-packages/ui-core": "1.0.0-canary.3",
-    "@wdk-ton-packages/ui-ton": "1.0.0-canary.5",
+    "@wdk-ton-packages/ui-ton": "1.0.0-canary.6",
     "bare-wdk-runtime": "2.0.1"
   },
   "devDependencies": {

@@ -71,13 +71,12 @@ describe('InternalUsdt0ProtocolTonGasless', () => {
     innerTonAccount = {
       getAddress: jest.fn().mockResolvedValue(USER_ADDRESS),
       _getJettonWalletAddress: jest.fn().mockResolvedValue(JETTON_WALLET_ADDRESS),
-      _getMessageHash: jest.fn().mockReturnValue('dummy-gasless-hash'),
       _tonClient: 'dummy-ton-client',
     }
     gaslessAccount._tonAccount = innerTonAccount
 
     gaslessAccount._getGaslessTokenTransferRawParams = jest.fn().mockResolvedValue({ commission: GASLESS_FEE })
-    gaslessAccount._sendGaslessTokenTransfer = jest.fn()
+    gaslessAccount._sendGaslessTokenTransfer = jest.fn().mockReturnValue('dummy-gasless-hash'),
 
     protocol = new InternalUsdt0ProtocolTonGasless(gaslessAccount)
   })
@@ -102,8 +101,6 @@ describe('InternalUsdt0ProtocolTonGasless', () => {
 
       expect(gaslessAccount._getGaslessTokenTransferRawParams).toHaveBeenCalled()
       expect(gaslessAccount._sendGaslessTokenTransfer).toHaveBeenCalled()
-
-      expect(innerTonAccount._getMessageHash).toHaveBeenCalled()
 
       expect(result).toEqual({
         hash: 'dummy-gasless-hash',
